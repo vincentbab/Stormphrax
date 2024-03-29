@@ -121,12 +121,12 @@ namespace stormphrax
 	}
 
 	template auto Position::applyMoveUnchecked<false, false>(Move, eval::NnueState *) -> void;
-	template auto Position::applyMoveUnchecked<true, false>(Move, eval::NnueState *) -> void;
+	//template auto Position::applyMoveUnchecked<true, false>(Move, eval::NnueState *) -> void;
 	template auto Position::applyMoveUnchecked<false, true>(Move, eval::NnueState *) -> void;
-	template auto Position::applyMoveUnchecked<true, true>(Move, eval::NnueState *) -> void;
+	//template auto Position::applyMoveUnchecked<true, true>(Move, eval::NnueState *) -> void;
 
 	template auto Position::popMove<false>(eval::NnueState *) -> void;
-	template auto Position::popMove<true>(eval::NnueState *) -> void;
+	//template auto Position::popMove<true>(eval::NnueState *) -> void;
 
 	template auto Position::setPiece<false>(Piece, Square) -> void;
 	template auto Position::setPiece<true>(Piece, Square) -> void;
@@ -139,23 +139,23 @@ namespace stormphrax
 
 	template auto Position::movePiece<false, false>(Piece, Square, Square, eval::NnueUpdates &) -> Piece;
 	template auto Position::movePiece<true, false>(Piece, Square, Square, eval::NnueUpdates &) -> Piece;
-	template auto Position::movePiece<false, true>(Piece, Square, Square, eval::NnueUpdates &) -> Piece;
-	template auto Position::movePiece<true, true>(Piece, Square, Square, eval::NnueUpdates &) -> Piece;
+	//template auto Position::movePiece<false, true>(Piece, Square, Square, eval::NnueUpdates &) -> Piece;
+	//template auto Position::movePiece<true, true>(Piece, Square, Square, eval::NnueUpdates &) -> Piece;
 
 	template auto Position::promotePawn<false, false>(Piece, Square, Square, PieceType, eval::NnueUpdates &) -> Piece;
 	template auto Position::promotePawn<true, false>(Piece, Square, Square, PieceType, eval::NnueUpdates &) -> Piece;
-	template auto Position::promotePawn<false, true>(Piece, Square, Square, PieceType, eval::NnueUpdates &) -> Piece;
-	template auto Position::promotePawn<true, true>(Piece, Square, Square, PieceType, eval::NnueUpdates &) -> Piece;
+	//template auto Position::promotePawn<false, true>(Piece, Square, Square, PieceType, eval::NnueUpdates &) -> Piece;
+	//template auto Position::promotePawn<true, true>(Piece, Square, Square, PieceType, eval::NnueUpdates &) -> Piece;
 
 	template auto Position::castle<false, false>(Piece, Square, Square, eval::NnueUpdates &) -> void;
 	template auto Position::castle<true, false>(Piece, Square, Square, eval::NnueUpdates &) -> void;
-	template auto Position::castle<false, true>(Piece, Square, Square, eval::NnueUpdates &) -> void;
-	template auto Position::castle<true, true>(Piece, Square, Square, eval::NnueUpdates &) -> void;
+	//template auto Position::castle<false, true>(Piece, Square, Square, eval::NnueUpdates &) -> void;
+	//template auto Position::castle<true, true>(Piece, Square, Square, eval::NnueUpdates &) -> void;
 
 	template auto Position::enPassant<false, false>(Piece, Square, Square, eval::NnueUpdates &) -> Piece;
 	template auto Position::enPassant<true, false>(Piece, Square, Square, eval::NnueUpdates &) -> Piece;
-	template auto Position::enPassant<false, true>(Piece, Square, Square, eval::NnueUpdates &) -> Piece;
-	template auto Position::enPassant<true, true>(Piece, Square, Square, eval::NnueUpdates &) -> Piece;
+	//template auto Position::enPassant<false, true>(Piece, Square, Square, eval::NnueUpdates &) -> Piece;
+	//template auto Position::enPassant<true, true>(Piece, Square, Square, eval::NnueUpdates &) -> Piece;
 
 	template auto Position::regen<false>() -> void;
 	template auto Position::regen<true>() -> void;
@@ -654,6 +654,8 @@ namespace stormphrax
 	template <bool UpdateNnue, bool StateHistory>
 	auto Position::applyMoveUnchecked(Move move, eval::NnueState *nnueState) -> void
 	{
+		static_assert(UpdateNnue == false);
+
 		if constexpr (UpdateNnue)
 			assert(nnueState != nullptr);
 
@@ -798,6 +800,8 @@ namespace stormphrax
 	template <bool UpdateNnue>
 	auto Position::popMove(eval::NnueState *nnueState) -> void
 	{
+		static_assert(UpdateNnue == false);
+
 		assert(m_states.size() > 1 && "popMove() with no previous move?");
 
 		if constexpr (UpdateNnue)
@@ -1254,6 +1258,8 @@ namespace stormphrax
 	template <bool UpdateKey, bool UpdateNnue>
 	auto Position::movePiece(Piece piece, Square src, Square dst, eval::NnueUpdates &nnueUpdates) -> Piece
 	{
+		static_assert(UpdateNnue == false);
+
 		assert(piece != Piece::None);
 
 		assert(src != Square::None);
@@ -1315,6 +1321,8 @@ namespace stormphrax
 	auto Position::promotePawn(Piece pawn, Square src, Square dst,
 		PieceType promo, eval::NnueUpdates &nnueUpdates) -> Piece
 	{
+		static_assert(UpdateNnue == false);
+
 		assert(pawn != Piece::None);
 		assert(pieceType(pawn) == PieceType::Pawn);
 
@@ -1366,6 +1374,8 @@ namespace stormphrax
 	template <bool UpdateKey, bool UpdateNnue>
 	auto Position::castle(Piece king, Square kingSrc, Square rookSrc, eval::NnueUpdates &nnueUpdates) -> void
 	{
+		static_assert(UpdateNnue == false);
+
 		assert(king != Piece::None);
 		assert(pieceType(king) == PieceType::King);
 
@@ -1410,6 +1420,8 @@ namespace stormphrax
 	template <bool UpdateKey, bool UpdateNnue>
 	auto Position::enPassant(Piece pawn, Square src, Square dst, eval::NnueUpdates &nnueUpdates) -> Piece
 	{
+		static_assert(UpdateNnue == false);
+		
 		assert(pawn != Piece::None);
 		assert(pieceType(pawn) == PieceType::Pawn);
 

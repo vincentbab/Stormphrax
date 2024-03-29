@@ -362,7 +362,7 @@ namespace stormphrax::datagen
 
 					const bool noisy = thread->pos.isNoisy(move);
 
-					thread->pos.applyMoveUnchecked<true, false>(move, &thread->nnueState);
+					thread->pos.applyMoveUnchecked<false, false>(move, &thread->nnueState);
 
 					if (thread->pos.isDrawn(false))
 					{

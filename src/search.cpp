@@ -916,7 +916,7 @@ namespace stormphrax::search
 			const auto movingPiece = boards.pieceAt(move.src());
 			assert(movingPiece != Piece::None);
 
-			const auto guard = pos.applyMove(move, &thread.nnueState);
+			const auto guard = pos.applyMove<false>(move, &thread.nnueState);
 
 			thread.prevMoves[ply] = {movingPiece, move.src(), move.historyDst()};
 
@@ -1167,7 +1167,7 @@ namespace stormphrax::search
 			// prefetch as early as possible
 			m_ttable.prefetch(pos.roughKeyAfter(move.move));
 
-			const auto guard = pos.applyMove(move.move, &thread.nnueState);
+			const auto guard = pos.applyMove<false>(move.move, &thread.nnueState);
 
 			++thread.search.nodes;
 

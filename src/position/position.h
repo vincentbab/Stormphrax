@@ -119,13 +119,15 @@ namespace stormphrax
 		auto resetFromDfrcIndex(u32 n) -> bool;
 
 		// Moves are assumed to be legal
-		template <bool UpdateNnue = true, bool StateHistory = true>
+		template <bool UpdateNnue = false, bool StateHistory = true>
 		auto applyMoveUnchecked(Move move, eval::NnueState *nnueState) -> void;
 
 		// Moves are assumed to be legal
-		template <bool UpdateNnue = true>
+		template <bool UpdateNnue = false>
 		[[nodiscard]] inline auto applyMove(Move move, eval::NnueState *nnueState)
 		{
+			static_assert(UpdateNnue == false);
+			
 			if constexpr (UpdateNnue)
 				assert(nnueState != nullptr);
 
@@ -149,6 +151,11 @@ namespace stormphrax
 	public:
 		[[nodiscard]] inline auto boards() const -> const auto & { return currState().boards; }
 		[[nodiscard]] inline auto bbs() const -> const auto & { return currState().boards.bbs(); }
+		[[nodiscard]] inline auto nbPieces(Color me, PieceType pt) const -> int { return util::popcnt(bbs().forPiece(pt, me)); }
+		[[nodiscard]] inline auto nbPieceTypes(PieceType pt) const -> int { return util::popcnt(bbs().forPiece(pt)); }
+		[[nodiscard]] inline auto getPiecesBB(Color me) const -> Bitboard { return bbs().forColor(me); }
+		[[nodiscard]] inline auto getPieceAt(Square sq) const -> Piece { return boards().pieceAt(sq); }
+
 
 		[[nodiscard]] inline auto toMove() const
 		{
@@ -506,14 +513,14 @@ namespace stormphrax
 		template <bool UpdateKeys = true>
 		auto movePieceNoCap(Piece piece, Square src, Square dst) -> void;
 
-		template <bool UpdateKeys = true, bool UpdateNnue = true>
+		template <bool UpdateKeys = true, bool UpdateNnue = false>
 		[[nodiscard]] auto movePiece(Piece piece, Square src, Square dst, eval::NnueUpdates &nnueUpdates) -> Piece;
 
-		template <bool UpdateKeys = true, bool UpdateNnue = true>
+		template <bool UpdateKeys = true, bool UpdateNnue = false>
 		auto promotePawn(Piece pawn, Square src, Square dst, PieceType promo, eval::NnueUpdates &nnueUpdates) -> Piece;
-		template <bool UpdateKeys = true, bool UpdateNnue = true>
+		template <bool UpdateKeys = true, bool UpdateNnue = false>
 		auto castle(Piece king, Square kingSrc, Square rookSrc, eval::NnueUpdates &nnueUpdates) -> void;
-		template <bool UpdateKeys = true, bool UpdateNnue = true>
+		template <bool UpdateKeys = true, bool UpdateNnue = false>
 		auto enPassant(Piece pawn, Square src, Square dst, eval::NnueUpdates &nnueUpdates) -> Piece;
 
 		[[nodiscard]] inline auto calcCheckers() const
